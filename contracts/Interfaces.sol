@@ -54,9 +54,7 @@ interface StrategyAPI {
     
 }
 
-
-
-
-
-
-
+interface DaiToken {
+    function transfer(address _receiver, uint _amount) external returns (bool);
+    function transferFrom(address _sender, address _receiver, uint _amount) external returns (bool);
+}
