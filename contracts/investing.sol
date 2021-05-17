@@ -1,6 +1,7 @@
 pragma solidity ^0.8.0;
 
 import "./Interfaces.sol";
+import "@chainlink/contracts/src/v0.6/interfaces/AggregatorV3Interface.sol";
 
 contract Investing is InvestingAPI {
     
@@ -50,12 +51,12 @@ contract Investing is InvestingAPI {
         daiToken = DaiToken(DAI);
     }
     
-    function create_pool(uint _tokenID, uint256 _startingAmount, uint256 _maxAmount, string memory _name)
+    function create_pool(uint _tokenID, uint256 _startingAmount, string memory _name)
     external onlySupportedTokens(_tokenID) returns (bool) {
         
         pool[msg.sender] = Pool(_name, _tokenID, _startingAmount, 0, true);
         
-        emit PoolCreated(_name, _tokenID, _startingAmount, _maxAmount);
+        emit PoolCreated(_name, _tokenID, _startingAmount);
         
         return true;
     }
@@ -119,6 +120,7 @@ contract Investing is InvestingAPI {
          lender[msg.sender].amount = lender[msg.sender].amount - _amount;
         
     }
+    
     function withdraw_dai(uint256 _amount) external override returns (uint256) {
          require(_amount > 0, "You can't withdraw 0 Stones");
          require(pool[lender[msg.sender].pool].valid == true, 'This pool is not valid');
@@ -130,5 +132,10 @@ contract Investing is InvestingAPI {
          pool[lender[msg.sender].pool].amount = pool[lender[msg.sender].pool].amount - _amount;
          lender[msg.sender].amount = lender[msg.sender].amount - _amount;   
     }
-    
+
+    function create_strategy(uint256 _amountRequested, uint256 _sellPrice, uint256 _maxAmount) external returns (bool) {
+        
+        
+        
+    }
 }
