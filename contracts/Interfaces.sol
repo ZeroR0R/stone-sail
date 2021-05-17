@@ -29,7 +29,7 @@ interface InvestingAPI is IERC20 {
     function name(address _poolAddress) external view returns (string calldata);
     
     // Events
-    event PoolCreated(string Name, uint SupportedTokenID, uint StartingAmount, uint MaxAmount);
+    event PoolCreated(string Name, uint SupportedTokenID, uint StartingAmount);
 }
 
 // Interface used to create and operate strategies
