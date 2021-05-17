@@ -10,7 +10,7 @@ interface InvestingAPI is IERC20 {
     function depost_dai(uint256 _amount) external returns (uint256);
     
     // Withdraw from a pool, returns amount withdrawn 
-    function withdraw_eth(uint256 _amount) external returns (uint256);
+    function withdraw_eth(uint256 _amount) external payable returns (uint256);
     function withdraw_stn(uint256 _amount) external returns (uint256);
     function withdraw_dai(uint256 _amount) external returns (uint256);
     
@@ -58,3 +58,10 @@ interface DaiToken {
     function transfer(address _receiver, uint _amount) external returns (bool);
     function transferFrom(address _sender, address _receiver, uint _amount) external returns (bool);
 }
+
+
+
+
+
+
+
