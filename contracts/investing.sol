@@ -78,7 +78,7 @@ contract Investing is InvestingAPI {
         // token.transferFrom(msg.sender, address(this), _amount);              ADD AFTER Token.sol IS FINISHED
         
         pool[_poolAddress].amount = pool[_poolAddress].amount + _amount;
-        lender[msg.sender] = Lender(_poolAddress, lender[msg.sender].amount + msg.value, 0);
+        lender[msg.sender] = Lender(_poolAddress, lender[msg.sender].amount + msg.value, 1);
         
     }
     
@@ -92,19 +92,43 @@ contract Investing is InvestingAPI {
         } else {require( 1 == 2, "DAI Transfer Failed");}
         
         pool[_poolAddress].amount = pool[_poolAddress].amount + _amount;
-        lender[msg.sender] = Lender(_poolAddress, lender[msg.sender].amount + _amount, 0);
+        lender[msg.sender] = Lender(_poolAddress, lender[msg.sender].amount + _amount, 2);
     }
     
-    function withdraw_eth(uint256 _amount) external override returns (uint256) {
-     require(_amount > 0, "You can't withdraw 0 ether");
-     require(pool[lender[msg.sender].pool].valid == true, 'This pool is not valid');
-     require(lender[msg.sender].tokenType == 0, 'This pool does not use Ether');
-     require(lender[msg.sender].amount >= _amount, 'You do not have that much invested');
-     
-     address(this).transfer(msg.sender, _amount);
+    function withdraw_eth(uint256 _amount) external payable override returns (uint256) {
+         require(_amount > 0, "You can't withdraw 0 ether");
+         require(pool[lender[msg.sender].pool].valid == true, 'This pool is not valid');
+         require(lender[msg.sender].tokenType == 0, 'This pool does not use Ether');
+         require(lender[msg.sender].amount >= _amount, 'You do not have that much invested');
+         
+         payable(msg.sender).transfer(_amount);
+         pool[lender[msg.sender].pool].amount = pool[lender[msg.sender].pool].amount - _amount;
+         lender[msg.sender].amount = lender[msg.sender].amount - _amount;
         
     }
-    function withdraw_stn(uint256 _amount) external returns (uint256);
-    function withdraw_dai(uint256 _amount) external returns (uint256);
+    
+    function withdraw_stn(uint256 _amount) external override returns (uint256){         
+         require(_amount > 0, "You can't withdraw 0 Stones");
+         require(pool[lender[msg.sender].pool].valid == true, 'This pool is not valid');
+         require(lender[msg.sender].tokenType == 1, 'This pool does not use Stones');
+         require(lender[msg.sender].amount >= _amount, 'You do not have that much invested');
+        
+        // token.transferFrom(address(this), msg.sender, _amount);              ADD AFTER Token.sol IS FINISHED
+        
+         pool[lender[msg.sender].pool].amount = pool[lender[msg.sender].pool].amount - _amount;
+         lender[msg.sender].amount = lender[msg.sender].amount - _amount;
+        
+    }
+    function withdraw_dai(uint256 _amount) external override returns (uint256) {
+         require(_amount > 0, "You can't withdraw 0 Stones");
+         require(pool[lender[msg.sender].pool].valid == true, 'This pool is not valid');
+         require(lender[msg.sender].tokenType == 1, 'This pool does not use Stones');
+         require(lender[msg.sender].amount >= _amount, 'You do not have that much invested');
+        
+        daiToken.transferFrom(address(this), msg.sender, _amount);
+        
+         pool[lender[msg.sender].pool].amount = pool[lender[msg.sender].pool].amount - _amount;
+         lender[msg.sender].amount = lender[msg.sender].amount - _amount;   
+    }
     
 }
