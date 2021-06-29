@@ -134,7 +134,10 @@ contract Investing is InvestingAPI {
     }
 
     function create_strategy(uint256 _amountRequested, uint256 _sellPrice, uint256 _maxAmount) external returns (bool) {
-        
+        require(pool[lender[msg.sender].pool].valid == true, 'This pool is not valid');
+        require(_amountRequested > 0, 'Value requested must be larger than Zero');
+        require(_sellPrice > 0, 'The Sell price must be greater than Zero');
+        require(_maxAmount >= _amountRequested, 'The Max amount must be larger than the requested amount');
         
         
     }
